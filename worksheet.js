@@ -6,10 +6,16 @@ export function setUpPages(elem) {
   const activePage = Math.floor(Math.random() * (numberOfPages - 1) + 1);
   let visiblePageRange = [],
     str = '<b>Pages:</b> ',
-    str2 = '';
+    str2 = '',
+    paginatorString = '<div id="page-S" class="page-selector">&laquo;</div>',
+    showingString = '';
 
   for (let i = 1; i <= numberOfPages; i++) {
     visiblePageRange.push(i);
+    paginatorString +=
+      i === activePage
+        ? `<div id="page-${i}" class="page-selector active">${i}</div>`
+        : `<div id="page-${i}" class="page-selector">${i}</div>`;
     if (i === numberOfPages) {
       str += `${i}`;
       str2 += `${i} - Showing ${
@@ -22,6 +28,10 @@ export function setUpPages(elem) {
       } of ${count}<br />`;
     }
   }
+  paginatorString += '<div id="page-E" class="page-selector">&raquo;</div>';
+  showingString += `Showing ${activePage * pageSize - (pageSize - 1)} thru ${
+    activePage * pageSize
+  } of ${count}`;
 
   if (visiblePageRange.length > maxLengthOfPaginator) {
     visiblePageRange.length = 0;
@@ -41,6 +51,16 @@ export function setUpPages(elem) {
   str += `<br /><br />${str2}`;
 
   elem.innerHTML = str;
+  document.querySelector('.pagination').innerHTML = paginatorString;
+  document.querySelector('#showing').innerHTML = showingString;
+
+  const pageSelectors = document.querySelectorAll('.page-selector');
+  pageSelectors.forEach((i) => {
+    i.addEventListener('click', (e) => {
+      let pageNumber = e.target.id.slice(-1);
+      console.log(pageNumber);
+    });
+  });
 }
 
 function generateArray(number, maxLength, maxValue) {

@@ -1,13 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    <style>
+      .pagination,
+      #showing {
+        display: flex;
+        justify-content: center;
+      }
+
+      .pagination div {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        cursor: pointer;
+      }
+
+      .pagination div.active {
+        background-color: rgb(64, 70, 156);
+        color: white;
+        border-radius: 8px;
+      }
+
+      .pagination div:hover:not(.active) {
+        background-color: #ddd;
+        border-radius: 8px;
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="pagination"></div>
+    <div id="showing"></div>
+    <div id="data"></div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

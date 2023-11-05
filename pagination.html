@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paginator</title>
+    <style>
+      #pagination-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      #pagination,
+      #showing {
+        display: flex;
+        justify-content: center;
+      }
+
+      #showing {
+        margin-top: 8px;
+      }
+
+      #pagination div {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        cursor: pointer;
+      }
+
+      #pagination div.active {
+        background-color: rgb(64, 70, 156);
+        color: white;
+        border-radius: 8px;
+      }
+
+      #pagination div:hover:not(.active) {
+        background-color: #ddd;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pagination-wrapper">
+      <div id="pagination"></div>
+      <div id="showing"></div>
+    </div>
+
+    <script>
+      let activePage = 1;
+      const count = Math.floor(Math.random() * (300 - 1) + 1);
+      let numberOfPages;
+      const pageSize = 25;
+      const maxLengthOfPaginator = 5;
+
+      function setUpPaginator() {
+        numberOfPages = Math.ceil(count / pageSize);
+        let visiblePageRange = [],
+          paginatorString =
+            '<div id="page-S" class="page-selector">&laquo;</div>',
+          showingString = '';
+
+        for (let i = 1; i <= numberOfPages; i++) {
+          visiblePageRange.push(i);
+          paginatorString +=
+            i === activePage
+              ? `<div id="page-${i}" class="page-selector active">${i}</div>`
+              : `<div id="page-${i}" class="page-selector">${i}</div>`;
+        }
+        paginatorString +=
+          '<div id="page-E" class="page-selector">&raquo;</div>';
+
+        if (activePage === numberOfPages) {
+          showingString += `Showing ${
+            activePage * pageSize - (pageSize - 1)
+          } thru ${count} of ${count}`;
+        } else {
+          showingString += `Showing ${
+            activePage * pageSize - (pageSize - 1)
+          } thru ${activePage * pageSize} of ${count}`;
+        }
+
+        if (visiblePageRange.length > maxLengthOfPaginator) {
+          visiblePageRange.length = 0;
+          visiblePageRange = generateArray(
+            activePage,
+            maxLengthOfPaginator,
+            numberOfPages
+          );
+        }
+
+        document.querySelector('#pagination').innerHTML = paginatorString;
+        document.querySelector('#showing').innerHTML = showingString;
+
+        const pageSelectors = document.querySelectorAll('.page-selector');
+        pageSelectors.forEach((i) => {
+          i.addEventListener('click', (e) => {
+            selectPage(e.target.id.slice(-1));
+          });
+        });
+      }
+
+      function selectPage(selectedValue) {
+        switch (selectedValue) {
+          case 'S':
+            activePage = 1;
+            break;
+          case 'E':
+            activePage = numberOfPages;
+            break;
+          default:
+            activePage = parseInt(selectedValue);
+        }
+        console.log(activePage);
+        setUpPaginator();
+      }
+
+      function generateArray(number, maxLength, maxValue) {
+        const halfLength = Math.floor(maxLength / 2);
+        let startValue = number - halfLength;
+
+        // Adjust startValue if it's less than 1
+        if (startValue < 1) {
+          startValue = 1;
+        }
+
+        // Calculate the actual array size based on startValue and maxValue
+        const actualLength = Math.min(maxLength, maxValue - startValue + 1);
+
+        // Create an empty array
+        const resultArray = [];
+
+        // Fill the array with consecutive numbers
+        for (let i = 0; i < actualLength; i++) {
+          resultArray.push(startValue + i);
+        }
+
+        return resultArray;
+      }
+
+      setUpPaginator();
+    </script>
+  </body>
+</html>
