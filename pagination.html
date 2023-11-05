@@ -48,7 +48,8 @@
 
     <script>
       let activePage = 1;
-      const count = Math.floor(Math.random() * (300 - 1) + 1);
+      // const count = Math.floor(Math.random() * (300 - 1) + 1);
+      const count = 714;
       let numberOfPages;
       const pageSize = 25;
       const maxLengthOfPaginator = 5;
@@ -62,13 +63,7 @@
 
         for (let i = 1; i <= numberOfPages; i++) {
           visiblePageRange.push(i);
-          paginatorString +=
-            i === activePage
-              ? `<div id="page-${i}" class="page-selector active">${i}</div>`
-              : `<div id="page-${i}" class="page-selector">${i}</div>`;
         }
-        paginatorString +=
-          '<div id="page-E" class="page-selector">&raquo;</div>';
 
         if (activePage === numberOfPages) {
           showingString += `Showing ${
@@ -88,6 +83,14 @@
             numberOfPages
           );
         }
+        visiblePageRange.forEach((i) => {
+          paginatorString +=
+            i === activePage
+              ? `<div id="page-${i}" class="page-selector active">${i}</div>`
+              : `<div id="page-${i}" class="page-selector">${i}</div>`;
+        });
+        paginatorString +=
+          '<div id="page-E" class="page-selector">&raquo;</div>';
 
         document.querySelector('#pagination').innerHTML = paginatorString;
         document.querySelector('#showing').innerHTML = showingString;
@@ -95,7 +98,7 @@
         const pageSelectors = document.querySelectorAll('.page-selector');
         pageSelectors.forEach((i) => {
           i.addEventListener('click', (e) => {
-            selectPage(e.target.id.slice(-1));
+            selectPage(e.target.id.split('-')[1]);
           });
         });
       }
@@ -111,7 +114,6 @@
           default:
             activePage = parseInt(selectedValue);
         }
-        console.log(activePage);
         setUpPaginator();
       }
 
